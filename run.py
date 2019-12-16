@@ -13,12 +13,22 @@ if __name__ == '__main__':
     # plot.show() # l'afficher
 
     sorted_cities = pds.DataFrame(sorted_cities) # convertir villes en dataframe
-    sorted_cities.rename(columns={'4':'Ville', '9':'Code commune', '13':'Population'}, inplace = True) # renommer colonnes
+    sorted_cities.rename(columns={'4':'Ville', '9':'Code_commune', '13':'Population'}, inplace = True) # renommer colonnes
 
     highschools_data = highschools.read_highschools_csv_data(settings.highschools_csv_path) # récup csv lycées
-    insee_averages = highschools.get_average(highschools_data)                                       
+
+    grouped_cities = highschools.group_cities_districts(highschools_data) # regrouper Paris en 1 ligne
+    # print(grouped_cities.loc[grouped_cities['Code commune'] == '13000']['Code commune'])
+
+    extracted_insee = highschools.extract_highschools_columns(grouped_cities) # extraire 2 colonnes
+
+    averages = highschools.average_by_insee(extracted_insee) 
+    print(averages)
                                                    
-    merge_result = pds.merge(insee_averages, sorted_cities[['Ville', 'Code commune', 'Population']], on='Code commune')
-    sorted_by_population_results = cities.sort_cities_by_population(merge_result, 'Population')
-    print(sorted_by_population_results)
+    # merge_result = pds.merge(insee_averages, sorted_cities[['Ville', 'Code commune', 'Population']], on='Code commune')
+    # sorted_by_population_results = cities.sort_cities_by_population(merge_result, 'Population')
+    # # print(sorted_by_population_results)
+
+    # grouped_cities = highschools.group_cities_districts(highschools_data)
+    # print(grouped_cities)
     
