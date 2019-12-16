@@ -6,9 +6,9 @@ def read_highschools_csv_data(path):
 
 
 def group_cities_districts(highschools):
-    paris_districts = ['75000',['0', '75101', '75102', '75103', '75104', '75105', '75106', '75107', '75108', '75109', '75110', '75111', '75112', '75113', '75114', '75115', '75116', '75117', '75118', '75119', '75120']]                                            # arrays d'arrondissements pour chaque ville
-    marseille_districts = ['13000', ['13201','13202','13203','13204','13205','13206','13207','13208','13209','13210','13211','13212','13213','13214', '13215']]                                            # boucle qui les parcourt, les cherche dans highschools et les change
-    lyon_districts = ['69000', ['69381', '69382', '69383', '69384', '69385', '69386', '69387', '69388', '69389']]
+    paris_districts = ['75056',['0', '75101', '75102', '75103', '75104', '75105', '75106', '75107', '75108', '75109', '75110', '75111', '75112', '75113', '75114', '75115', '75116', '75117', '75118', '75119', '75120']]                                            # arrays d'arrondissements pour chaque ville
+    marseille_districts = ['13055', ['13201','13202','13203','13204','13205','13206','13207','13208','13209','13210','13211','13212','13213','13214', '13215']]                                            # boucle qui les parcourt, les cherche dans highschools et les change
+    lyon_districts = ['69123', ['69381', '69382', '69383', '69384', '69385', '69386', '69387', '69388', '69389']]
     list_of_districts = [paris_districts, marseille_districts, lyon_districts]
     print(list_of_districts)
 
@@ -31,3 +31,11 @@ def extract_highschools_columns(highschools):
 def average_by_insee(highschools):
     highschools.rename(columns={'Code commune':'Code_commune', 'Taux Brut de Réussite Total séries':'reussite'}, inplace = True) # renommer colonnes
     return highschools.groupby(['Code_commune'], as_index=False).mean()
+
+
+def sort_cities_by_success(data):
+    return data.sort_values(by='reussite', ascending=False)
+
+    
+def create_graph(sorted_data):
+    return sorted_data.plot(x='Ville', y='reussite', kind='bar')
