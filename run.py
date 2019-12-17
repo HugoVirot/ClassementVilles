@@ -23,11 +23,14 @@ if __name__ == '__main__':
                                            
     merge_result = pds.merge(averages, sorted_cities[['Ville', 'Code_commune', 'Population']], on='Code_commune')
     
-    sorted_by_population_results = cities.sort_cities_by_population(merge_result, 'Population')
+    sorted_by_population_results = cities.sort_cities_by_population(merge_result, 'Population') # villes triées par taille
     
-    biggest_cities = sorted_by_population_results.head(settings.cities_max_number)
+    biggest_cities = sorted_by_population_results.head(settings.cities_max_number) # 50 plus grandes villes
     
-    sorted_by_success = highschools.sort_cities_by_success(biggest_cities)
+    ratings = highschools.calculate_ratings(biggest_cities)
+    print(ratings)
+
+    sorted_by_success = highschools.sort_cities_by_success(biggest_cities) # villes triées par réussite
     print(sorted_by_success)
 
     bar_data = highschools.create_graph(sorted_by_success) # créer un graphique
