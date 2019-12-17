@@ -10,7 +10,7 @@ def test_csv_loading():
 def test_columns_extraction():
     data = highschools.read_highschools_csv_data(settings.highschools_csv_path)
     extracted_columns = highschools.extract_highschools_columns(data)
-    assert len(extracted_columns.columns) == 2
+    assert len(extracted_columns.columns) == 3
 
 def test_one_line_per_insee():
     data = {'Code commune': ['99999','99999','99999'], 'réussite' : [50.0, 75.0, 100.0]}

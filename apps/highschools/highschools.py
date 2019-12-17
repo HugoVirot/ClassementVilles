@@ -1,5 +1,7 @@
 import pandas as pds
 import numpy as np
+from apps.cities import cities
+import settings
 
 def read_highschools_csv_data(path):
     """
@@ -78,3 +80,15 @@ def create_graph(sorted_data):
     Paramètre : les 50 (settins.cities_max_number, nombre modifiable) plus grandes villes triées par note.
     """
     return sorted_data.plot(x='Ville', y='note', kind='bar')
+
+
+def rate_and_sort_biggest_cities(highschools_data, sorted_cities):
+    grouped_cities = group_cities_districts(highschools_data) # regrouper Paris en 1 ligne
+    extracted_insee = extract_highschools_columns(grouped_cities) # extraire 2 colonnes
+    averages = average_by_insee(extracted_insee) 
+    merge_result = pds.merge(averages, sorted_cities[['Ville', 'Code_commune', 'Population']], on='Code_commune')
+    sorted_by_population_results = cities.sort_cities_by_population(merge_result) # villes triées par taille
+    biggest_cities = sorted_by_population_results.head(settings.cities_max_number) # 50 plus grandes villes
+    rate_biggest_cities = calculate_ratings(biggest_cities)
+    sorted_by_rating_cities = sort_cities_by_success(biggest_cities) # villes triées par réussite
+    return sorted_by_rating_cities

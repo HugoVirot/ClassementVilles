@@ -8,6 +8,6 @@ def test_csv_loading():
 
 def test_sorting():
     data = cities.read_cities_csv_data(settings.cities_csv_path)
-    sorted_cities = cities.sort_cities_by_population(data, '13')
+    sorted_cities = cities.rename_and_sort(data)
     assert (sorted_cities.iloc[0][2]) == "PARIS"
 
