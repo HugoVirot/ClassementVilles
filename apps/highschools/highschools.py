@@ -51,7 +51,7 @@ def average_by_insee(highschools):
     Réduit la liste à une ligne par code insee, tout en faisant une moyenne des taux de mentions et de réussite.
     1 paramètre : la liste des lycées (après extraction des 3 colonnes)
     """
-    highschools.rename(columns={'Code commune':'Code_commune', 'Taux_Mention_brut_toutes_series':'mentions', 'Taux Brut de Réussite Total séries':'reussite'}, inplace = True) # renommer colonnes
+    highschools.rename(columns={'Code commune':'Code_commune', 'Taux_Mention_brut_toutes_series':'Mentions', 'Taux Brut de Réussite Total séries':'Réussite'}, inplace = True) # renommer colonnes
     return highschools.groupby(['Code_commune'], as_index=False).mean()
 
 
@@ -60,9 +60,9 @@ def calculate_ratings(highschools):
     Calcule une note pour chaque ville (résultat de taux mentions + taux réussite, divisé par 10).
     1 paramètre : liste des villes ayant un lycée (avec moyennes des taux effectuées)
     """
-    cols = ["mentions","reussite"]
-    highschools["note"] = highschools[cols].sum(axis=1)
-    highschools["note"] /= 10
+    cols = ["Mentions","Réussite"]
+    highschools["Note"] = highschools[cols].sum(axis=1)
+    highschools["Note"] /= 10
     return highschools
 
 
@@ -71,8 +71,14 @@ def sort_cities_by_success(data):
     Trie les villes par note.
     1 paramètre : la liste des 50 (settins.cities_max_number, nombre modifiable) plus grandes villes de France.
     """
-    return data.sort_values(by='note', ascending=False)
+    return data.sort_values(by='Note', ascending=False)
 
+def remove_cities_columns(rated_cities):
+    """
+    Permet d'enlever les colonnes "mentions" et "réussite" de la liste des lycées.
+    1 paramètre : la liste des 50 plus grandes villes avec leur note.
+    """
+    return rated_cities.filter(items=['Code_commune', 'Ville', 'Note'])
 
 def rate_and_sort_biggest_cities(highschools_data, sorted_cities):
     """
@@ -83,12 +89,12 @@ def rate_and_sort_biggest_cities(highschools_data, sorted_cities):
     grouped_cities = group_cities_districts(highschools_data) # regrouper Paris en 1 ligne
     extracted_insee = extract_highschools_columns(grouped_cities) # extraire 2 colonnes
     averages = average_by_insee(extracted_insee) 
-    merge_result = pds.merge(averages, sorted_cities[['Ville', 'Code_commune', 'Population']], on='Code_commune')
+    merge_result = pds.merge(averages, sorted_cities[['Ville', 'Code_commune', 'Population', 'Latitude', 'Longitude']], on='Code_commune')
     sorted_by_population_results = cities.sort_cities_by_population(merge_result) # villes triées par taille
     biggest_cities = sorted_by_population_results.head(settings.cities_max_number) # 50 plus grandes villes
-    print(biggest_cities)
-    rate_biggest_cities = calculate_ratings(biggest_cities)
-    sorted_by_rating_cities = sort_cities_by_success(rate_biggest_cities) # villes triées par réussite
+    rated_cities = calculate_ratings(biggest_cities)
+    filtered_columns_rated_cities = remove_cities_columns(rated_cities)
+    sorted_by_rating_cities = sort_cities_by_success(filtered_columns_rated_cities) # villes triées par réussite
     return sorted_by_rating_cities
 
 
@@ -97,4 +103,4 @@ def create_graph(sorted_data):
     Crée un graphique à partir des données fournies.
     1 paramètre : les 50 (settins.cities_max_number, nombre modifiable) plus grandes villes triées par note.
     """
-    return sorted_data.plot(x='Ville', y='note', kind='bar')
+    return sorted_data.plot(x='Ville', y='Note', kind='bar')

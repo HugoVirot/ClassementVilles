@@ -2,7 +2,7 @@ import matplotlib.pyplot as plot
 from apps.cities import cities
 from apps.highschools import highschools
 import settings
-# from database import connect
+from database import connect
 import argparse
 
 if __name__ == "__main__":
@@ -27,8 +27,8 @@ if __name__ == "__main__":
         bar_data = highschools.create_graph(sorted_by_rating_cities) # créer un graphique
         plot.show() # l'afficher
 
-    # if args.action == "insert_cities_and_highschools_into_db":
-    #     connect.insert_cities_and_highschools_into_db()
+    if args.action == "insert_cities_and_highschools_into_db":
+        connect.insert_cities_and_highschools_into_db()
 
 
     

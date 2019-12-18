@@ -17,4 +17,12 @@ def sort_cities_by_population(cities):
     sorted_cities = df_cities.sort_values(by='Population', ascending=False)
     return sorted_cities
 
+def remove_biggest_cities_columns(sorted_cities):
+    """
+    Permet de garder seulement 4 colonnes du tableau des villes.
+    1 paramètre : la liste des 50 plus grandes villes avec leur note.
+    """
+    biggest_cities = sorted_cities.head(50) # 50 plus grandes villes
+    return biggest_cities.filter(items=['Code_commune', 'Ville', 'Latitude', 'Longitude'])
+
 
