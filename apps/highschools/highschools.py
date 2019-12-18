@@ -1,5 +1,4 @@
 import pandas as pds
-import numpy as np
 from apps.cities import cities
 import settings
 
@@ -87,8 +86,9 @@ def rate_and_sort_biggest_cities(highschools_data, sorted_cities):
     merge_result = pds.merge(averages, sorted_cities[['Ville', 'Code_commune', 'Population']], on='Code_commune')
     sorted_by_population_results = cities.sort_cities_by_population(merge_result) # villes triées par taille
     biggest_cities = sorted_by_population_results.head(settings.cities_max_number) # 50 plus grandes villes
+    print(biggest_cities)
     rate_biggest_cities = calculate_ratings(biggest_cities)
-    sorted_by_rating_cities = sort_cities_by_success(biggest_cities) # villes triées par réussite
+    sorted_by_rating_cities = sort_cities_by_success(rate_biggest_cities) # villes triées par réussite
     return sorted_by_rating_cities
 
 
