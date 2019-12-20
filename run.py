@@ -10,6 +10,9 @@ from apps.highschools.controllers import insert_ratings_into_database
 from apps.highschools.controllers import create_graph
 from apps.doctors.controllers import read_doctors_csv_data
 from apps.doctors.controllers import group_doctors_by_insee
+from apps.doctors.controllers import filter_by_biggest_cities
+
+
 
 import settings
 import argparse
@@ -46,7 +49,8 @@ if __name__ == "__main__":
     if args.action == "doctors":
         doctors_data = read_doctors_csv_data(settings.doctors_csv_path)
         grouped_doctors = group_doctors_by_insee(doctors_data)
-        print(grouped_doctors)
+        filtered_doctors = filter_by_biggest_cities(grouped_doctors)
+        print(filtered_doctors)
 
 
 
