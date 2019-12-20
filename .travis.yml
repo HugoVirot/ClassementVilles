@@ -2,7 +2,9 @@ language: python
 python:
   - 3.7
 before_install:
-  - pip install -U pytest
+  - pip install -U pytest pytest-cov codecov
 install:
   - pip install pandas peewee matplotlib haversine
-script: pytest -v  # run tests
+script: pytest -v --cov=.
+after_success:
+  - codecov

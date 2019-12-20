@@ -71,9 +71,11 @@ def calculate_ratings(highschools):
     Calcule une note pour chaque ville (résultat de taux mentions + taux réussite, divisé par 10).
     1 paramètre : liste des villes ayant un lycée (avec moyennes des taux effectuées)
     """
+
     cols = ["Mentions", "Réussite"]
     highschools["Note"] = highschools[cols].sum(axis=1)
     highschools["Note"] /= 10
+    print(highschools)
     return highschools
 
 

@@ -20,5 +20,5 @@ def delete_citiesmodel():
     return CitiesModel.delete()
 
 
-def insert_dictionnary(dictionnary):
+def insert_cities(dictionnary):
     CitiesModel.insert_many(dictionnary).execute()

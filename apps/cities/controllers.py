@@ -44,4 +44,4 @@ def insert_cities_into_db():
     cities_dict = biggest_cities.to_dict('records')
     query = models.delete_citiesmodel()
     query.execute()
-    models.insert_dictionnary(cities_dict)
+    models.insert_cities(cities_dict)
