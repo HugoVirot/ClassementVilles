@@ -1,10 +1,10 @@
 from peewee import *
 from connect import sqlite_db
-from apps.cities import models as citiesmodels
+from apps.cities.models import CitiesModel
 
 
 class DoctorsModel(Model):
-    City = ForeignKeyField(citiesmodels)
+    City = ForeignKeyField(CitiesModel)
     Number = DecimalField(max_digits=6, decimal_places=2)
 
     class Meta:
